@@ -5,9 +5,38 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Clash Web Panel</title>
-  <link href="" rel="stylesheet">
+  <link href="//unpkg.yutent.top/@bytedo/wcui/dist/css/reset-basic.css" rel="stylesheet">
+  <link href="css/app.css" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <script src="js/app.js" type="module"></script>
+  <!-- <script>window.resizeTo(1000, 640);navigator.serviceWorker.register('sw.js')</script> -->
 </head>
 <body>
-  
+  <div class="app" anot="app">
+    <aside class="aside noselect">
+      <a class="logo"></a>
+
+      <nav class="nav-list">
+        <a 
+          class="item"
+          :for="i it in navs"
+          :class="{active: i === tab}"
+          @click="changeTab(i)"
+          :text="it">
+        </a>
+      </nav>
+
+      <span class="holder"></span>
+      <span class="version">{{version}}</span>
+    </aside>
+
+    <main class="main">
+      <header class="title">{{title}}</header>
+
+      <div class="tab-content">
+
+      </div>
+    </main>
+  </div>
 </body>
 </html>
