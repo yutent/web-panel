@@ -2,9 +2,10 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Clash Web Panel</title>
+  <link rel="favicon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="icons/192x192.png">
   <link href="//unpkg.yutent.top/@bytedo/wcui/dist/css/reset-basic.css" rel="stylesheet">
   <link href="css/app.css" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
@@ -12,8 +13,8 @@
   <!-- <script>window.resizeTo(1000, 640);navigator.serviceWorker.register('sw.js')</script> -->
 </head>
 <body>
-  <div class="app" anot="app">
-    <aside class="aside noselect">
+  <div class="app noselect" anot="app">
+    <aside class="aside">
       <a class="logo"></a>
 
       <nav class="nav-list">
@@ -30,13 +31,103 @@
       <span class="version">{{version}}</span>
     </aside>
 
-    <main class="main">
-      <header class="title">{{title}}</header>
+    <main class="tab-content" :if="tab === 0"></main>
 
-      <div class="tab-content">
+    <main class="tab-content rules" :if="tab === 1">
+      <fieldset class="card">
+        <legend>规则列表</legend>
 
-      </div>
+        <wc-scroll class="scroll">
+          <ul class="list">
+            <li class="item" :for="i it in rules">
+              <span>{{it.type}}</span>
+              <span>{{it.payload}}</span>
+              <span class="type">{{it.proxy}}</span>
+            </li>
+          </ul>
+        </wc-scroll>
+      </fieldset>
     </main>
+
+    <main class="tab-content" :if="tab === 2"></main>
+
+    <main class="tab-content remote" :if="tab === 3">
+      <fieldset class="card">
+        <legend>订阅配置</legend>
+
+        <section class="field">
+          <span class="label">订阅地址</span>
+          <wc-input class="full" :duplex="remote.link"></wc-input>
+          <wc-button type="info" :disabled="!remote.link" @click="updateRemote">更新</wc-button>
+        </section>
+
+        <wc-scroll class="scroll">
+          <ul class="list">
+            <li class="item" :for="i it in remote.list">
+              {{i + 1}}.
+              <span>{{it[0]}}</span>
+              <span class="type">{{it[1]}}</span>
+            </li>
+          </ul>
+        </wc-scroll>
+      </fieldset>
+    </main>
+
+    <main class="tab-content configs" :if="tab === 4">
+      <fieldset class="card">
+        <legend>系统设置</legend>
+
+        <section class="field">
+          <span class="label">开机启动Clash</span>
+          <wc-switch disabled></wc-switch>
+        </section>
+
+        <section class="field">
+          <span class="label">设置为系统代理</span>
+          <wc-switch disabled></wc-switch>
+        </section>
+
+        <section class="field">
+          <span class="label">允许局域网的连接</span>
+          <wc-switch :duplex="configs.allowLan"></wc-switch>
+        </section>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>Clash设置</legend>
+
+        <section class="field">
+          <span class="label">代理模式</span>
+          <wc-radio-group :duplex="configs.proxy">
+            <wc-radio value="global">全局</wc-radio>
+            <wc-radio value="rule">规则</wc-radio>
+            <wc-radio value="direct">直连</wc-radio>
+          </wc-radio-group>
+        </section>
+
+        <section class="field">
+          <span class="label">Socks5 代理端口</span>
+          <wc-input size="small" :duplex="configs.socks5"></wc-input>
+        </section>
+
+        <section class="field">
+          <span class="label">HTTP 代理端口</span>
+          <wc-input size="small" :duplex="configs.http"></wc-input>
+        </section>
+
+        <section class="field">
+          <span class="label">混合代理端口</span>
+          <wc-input size="small" :duplex="configs.mixed"></wc-input>
+        </section>
+
+        <section class="field">
+          <span class="label">本地管理设置</span>
+          <wc-input size="small" class="full" readonly :value="{{contrl.host + contrl.port}}"></wc-input>
+        </section>
+
+      </fieldset>
+    </main>
+
   </div>
 </body>
 </html>
